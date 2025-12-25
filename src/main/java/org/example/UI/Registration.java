@@ -125,8 +125,8 @@ public class Registration extends JFrame {
                 JOptionPane.showMessageDialog(null, "Please Enter your Name, username and password");
             }else {
                 addUser();
-                JOptionPane.showMessageDialog(null, "User Registered Successfully");
-                new userlogin();
+                new popUpPage("REGISTERED SUCCESSFULLY","Your details have been successfully submitted \n" +
+                        "You can now login","Login");
                 this.dispose();
             }
         });

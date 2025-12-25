@@ -94,6 +94,8 @@ public class userlogin extends javax.swing.JFrame {
         forgetPassword.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                new popUpPage("Password Changed!","You’ve successfully completed your\n" +
+                        "password reset","Login");
                 new forgetPasswordPage();
             }
         });
@@ -118,7 +120,7 @@ public class userlogin extends javax.swing.JFrame {
             }else {
                 boolean flag = checkLogin(name , pass);
                 if(flag) {
-                    new chatWindow(name).setVisible(true);
+                    new popUpPage("LOGIN SUCCESSFUL" , "You’re all set and ready to start" ,"Open Chat" , name);
                     this.dispose();
                 }
                 else

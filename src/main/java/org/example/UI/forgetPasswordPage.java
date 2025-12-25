@@ -125,7 +125,8 @@ public class forgetPasswordPage extends javax.swing.JFrame {
             checkStmt.setString(2, name);
             int rows = checkStmt.executeUpdate();
             if (rows > 0) {
-                JOptionPane.showMessageDialog(null, "Password has been reset");
+                new popUpPage("Password Changed!","You’ve successfully completed your\n" +
+                        "password reset","Login");
             }
             else {
                 JOptionPane.showMessageDialog(null, "Failed to reset your password");
