@@ -8,47 +8,17 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.*;
 
-public class userlogin extends javax.swing.JFrame {
-    JLabel header , forgetPassword;
+public class UserLogin extends BaseFrame {
+    JLabel  forgetPassword;
     JLabel usernameLabel, passwordLabel;
     JTextField usernameTextField, passwordTextField;
     JButton login;
-    JPanel panel, wrapper, fieldBlock , fieldWrapper , signupWrapper;
+    JPanel signupWrapper;
     JLabel signUpLabel , signUp;
 
-    public userlogin() {
-        setSize(1512, 982);
-        setLayout(new BorderLayout(1089, 679));
+    public UserLogin() {
 
-        wrapper = new JPanel(new GridBagLayout());
-        wrapper.setBackground(new Color(244, 244, 244));
-
-
-        panel = new RoundedPanel(20);
-//        panel.setPreferredSize(new Dimension(750, 450));
-//        use Minimum Size becoz preferred Size ignore to resize insides components
-        panel.setMinimumSize(new Dimension(750, 450));
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createEmptyBorder(40, 50, 40, 50));
-        panel.setBackground(new Color(255, 255, 255));
-
-        header = new JLabel("Login To Your Account");
-        header.setFont(new Font("Serif", Font.BOLD, 48));
-        header.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(header);
-        panel.add(Box.createVerticalStrut(60));
-
-//      FieldWrapper
-        fieldWrapper = new JPanel(new BorderLayout());
-        fieldWrapper.setBackground(Color.WHITE);
-        fieldWrapper.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200));
-
-//      FieldBlock: Initializing Field Block That aligned Fields in the left side
-        fieldBlock = new JPanel();
-        fieldBlock.setLayout(new BoxLayout(fieldBlock, BoxLayout.Y_AXIS));
-        fieldBlock.setBackground(new Color(255, 255, 255));
-
-//      Field Block
+        header.setText("Login to your account");
 
 //      usernameLabel
         usernameLabel = new JLabel("Username");
@@ -94,8 +64,6 @@ public class userlogin extends javax.swing.JFrame {
         forgetPassword.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                new popUpPage("Password Changed!","You’ve successfully completed your\n" +
-                        "password reset","Login");
                 new forgetPasswordPage();
             }
         });
@@ -152,6 +120,7 @@ public class userlogin extends javax.swing.JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 new Registration();
+                dispose();
             }
         });
         signupWrapper.add(signUp);
@@ -159,11 +128,6 @@ public class userlogin extends javax.swing.JFrame {
 
         panel.add(signupWrapper);
 //      SignUp Setup
-
-        wrapper.add(panel);
-        add(wrapper, BorderLayout.CENTER);
-        setVisible(true);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
     }
 
@@ -180,5 +144,8 @@ public class userlogin extends javax.swing.JFrame {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+    public static void main(String[] args){
+        new UserLogin();
     }
 }

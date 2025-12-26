@@ -4,50 +4,16 @@ import org.example.DataBaseConnection.DBConnection;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.sql.*;
 
-public class forgetPasswordPage extends javax.swing.JFrame {
-    JLabel header;
+public class forgetPasswordPage extends BaseFrame {
     JLabel usernameLabel, newPasswordLabel;
     JTextField usernameTextField, newPasswordTextField;
     JButton updatePassword;
-    JPanel panel, wrapper, fieldBlock , fieldWrapper;
 
     public forgetPasswordPage() {
-        setSize(1512, 982);
-        setLayout(new BorderLayout(1089, 679));
 
-        wrapper = new JPanel(new GridBagLayout());
-        wrapper.setBackground(new Color(244, 244, 244));
-
-
-        panel = new RoundedPanel(20);
-//        panel.setPreferredSize(new Dimension(750, 450));
-//        use Minimum Size becoz preferred Size ignore to resize insides components
-        panel.setMinimumSize(new Dimension(750, 450));
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createEmptyBorder(40, 50, 40, 50));
-        panel.setBackground(new Color(255, 255, 255));
-
-        header = new JLabel("Forgot Your Password?");
-        header.setFont(new Font("Serif", Font.BOLD, 48));
-        header.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(header);
-        panel.add(Box.createVerticalStrut(60));
-
-//      FieldWrapper
-        fieldWrapper = new JPanel(new BorderLayout());
-        fieldWrapper.setBackground(Color.WHITE);
-        fieldWrapper.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200));
-
-//      FieldBlock: Initializing Field Block That aligned Fields in the left side
-        fieldBlock = new JPanel();
-        fieldBlock.setLayout(new BoxLayout(fieldBlock, BoxLayout.Y_AXIS));
-        fieldBlock.setBackground(new Color(255, 255, 255));
-
-//      Field Block
+        header.setText("Forgot Your Password?");
 
 //      usernameLabel
         usernameLabel = new JLabel("Username");
@@ -98,6 +64,7 @@ public class forgetPasswordPage extends javax.swing.JFrame {
         updatePassword.setFont(new Font("Serif", Font.BOLD, 38));
 
         updatePassword.addActionListener(e -> {
+            System.out.println("BUTTON CLICKED");
             String name = usernameTextField.getText();
             String pass = newPasswordTextField.getText();
             if (name.isEmpty() || pass.isEmpty()){
@@ -111,10 +78,8 @@ public class forgetPasswordPage extends javax.swing.JFrame {
 
         panel.add(Box.createVerticalStrut(15));
 
-        wrapper.add(panel);
-        add(wrapper, BorderLayout.CENTER);
-        setVisible(true);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
     }
     public void resetPass(String name , String pass){
         String Sql = "Update users set password = ? where username = ?";

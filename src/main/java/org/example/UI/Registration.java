@@ -10,31 +10,17 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Connection;
 
-public class Registration extends JFrame {
-        private final JLabel header, usernameLabel , passwordLabel, nameLabel;
+public class Registration extends BaseFrame {
+        private final JLabel usernameLabel , passwordLabel, nameLabel;
         private final JTextField usernameTextField, passwordTextField , nameTextField;
         private final JButton Register;
-        private final JPanel panel , wrapper, fieldBlock , fieldWrapper, signInWrapper;
+        private final JPanel signInWrapper;
         private final JLabel signInLabel, signIn;
 
     public Registration(){
-        setSize(1512, 982);
-        setLayout(new BorderLayout(1089,679));
-        wrapper = new JPanel(new GridBagLayout());
-        wrapper.setBackground(new Color(244, 244, 244));
-
-        panel = new RoundedPanel(20);
-        panel.setMinimumSize(new Dimension(750, 450));
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createEmptyBorder(40, 50, 40, 50));
-        panel.setBackground(new Color(255, 255, 255));
 
 //      Header
-        header = new JLabel("Register To Continue");
-        header.setFont(new Font("Serif", Font.BOLD, 48));
-        header.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(header);
-        panel.add(Box.createVerticalStrut(60));
+        header.setText("Register To Continue");
 //      Header
 
 //      FieldWrapper
@@ -157,7 +143,8 @@ public class Registration extends JFrame {
         signIn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                new userlogin();
+                new UserLogin();
+                dispose();
             }
         });
         signInWrapper.add(signIn);
@@ -165,10 +152,10 @@ public class Registration extends JFrame {
         panel.add(signInWrapper);
 //      **SignIn Setup**
 
-        wrapper.add(panel);
-        add(wrapper, BorderLayout.CENTER);
-        setVisible(true);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+//        wrapper.add(panel);
+//        add(wrapper, BorderLayout.CENTER);
+//        setVisible(true);
+//        setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
     public void addUser() {
         String Name = nameTextField.getText();
@@ -178,6 +165,9 @@ public class Registration extends JFrame {
 
         DBOperation operation = new DBOperation();
         operation.insertUser(Name , userName, Password);
+    }
+    public static void main(String[] args) {
+        new Registration();
     }
 
 }
