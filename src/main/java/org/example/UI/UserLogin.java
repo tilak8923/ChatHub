@@ -119,7 +119,7 @@ public class UserLogin extends BaseFrame {
         signUp.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                new Registration();
+                new RegistrationPage();
                 dispose();
             }
         });
@@ -144,8 +144,5 @@ public class UserLogin extends BaseFrame {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-    public static void main(String[] args){
-        new UserLogin();
     }
 }

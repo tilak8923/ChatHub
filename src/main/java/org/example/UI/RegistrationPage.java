@@ -10,14 +10,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Connection;
 
-public class Registration extends BaseFrame {
+public class RegistrationPage extends BaseFrame {
         private final JLabel usernameLabel , passwordLabel, nameLabel;
         private final JTextField usernameTextField, passwordTextField , nameTextField;
         private final JButton Register;
         private final JPanel signInWrapper;
         private final JLabel signInLabel, signIn;
 
-    public Registration(){
+    public RegistrationPage(){
 
 //      Header
         header.setText("Register To Continue");
@@ -166,8 +166,4 @@ public class Registration extends BaseFrame {
         DBOperation operation = new DBOperation();
         operation.insertUser(Name , userName, Password);
     }
-    public static void main(String[] args) {
-        new Registration();
-    }
-
 }

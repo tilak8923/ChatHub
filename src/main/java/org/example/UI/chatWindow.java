@@ -1,99 +1,83 @@
 package org.example.UI;
-
 import javax.swing.*;
-import org.example.server.chatClient;
-
 import java.awt.*;
 
-public class chatWindow extends JFrame {
+public class chatWindow extends ChatWindowBase {
 
-//    private final chatClient client;
-//    private final JPanel scrollablePanel;
-//    private final JPanel footer;
-//
-//    public chatWindow(String username) {
-//        setTitle("ChatHub - " + username);
-//        setSize(400, 500);
-//        setLayout(new BorderLayout());
-//
-//        footer = new JPanel();
-//        footer.setLayout(new FlowLayout());
-//        scrollablePanel = new JPanel();
-////        scrollablePanel.add()
-//
-//
-//        client = new chatClient(username);
-//        JTextArea area = new JTextArea();
-////        area.setEditable(false);
-//
-//        JTextField input = new JTextField();
-////        input.setSize(100, 30);
-//        JButton sendBtn = new JButton("Send");
-//
-//        sendBtn.addActionListener(e -> {
-//            String msg = input.getText();
-//            client.sendMessage(username + ": " + msg);
-//            input.setText("");
-//        });
-//
-////        add(new JScrollPane(area), "Center");
-//        add(scrollablePanel , BorderLayout.CENTER);
-//        footer.add(input);
-//        footer.add(sendBtn);
-//
-//        add(footer , BorderLayout.SOUTH);
-//
-//        setDefaultCloseOperation(EXIT_ON_CLOSE);
-//    }
-    private final JPanel messagesPanel;
-    private final JScrollPane scrollPane;
-    private final JPanel footer;
-    private final JTextField inputField;
-    private final JButton sendButton;
+     JScrollPane scrollPane;
+     JPanel chatPanel , messagePanel, footer;
+     JLabel messageName , messageText , messageTime;
+     JTextField inputField;
+     JButton sendButton;
 
     public chatWindow(String username) {
 
         setTitle("ChatHub - " + username);
-        setSize(400, 500);
-        setLayout(new BorderLayout());
-        setLocationRelativeTo(null);
+
+        scrollPane = new JScrollPane();
+        scrollPane.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
+        scrollPane.getVerticalScrollBar().setUnitIncrement(10);
+        scrollPane.setPreferredSize(new Dimension(700, 300));
+
+        chatPanel = new JPanel();
+        chatPanel.setLayout(new BoxLayout(chatPanel, BoxLayout.Y_AXIS));
+//        chatPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         /* =====================
            MESSAGE AREA
         ===================== */
 
-        messagesPanel = new JPanel();
-        messagesPanel.setLayout(new BoxLayout(messagesPanel, BoxLayout.Y_AXIS));
-        messagesPanel.setBackground(Color.white);
+        messagePanel = new JPanel();
+        messagePanel.setLayout(new BoxLayout(messagePanel, BoxLayout.Y_AXIS));
+        messagePanel.setBackground(new Color(38, 217, 92));
 
-        scrollPane = new JScrollPane(messagesPanel);
-        scrollPane.setBorder(null);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(10);
+//      Adding Properties Of Message Panel
+//        - Message Name
+        messageName = new JLabel("Tilak");
+//        messageName.setHorizontalAlignment(JLabel.LEFT);
+        messageName.setFont(new Font("Arial", Font.PLAIN, 16));
+        messagePanel.add(messageName);
 
-        add(scrollPane, BorderLayout.CENTER);
+//        - Message Text
+        messageText = new JLabel("hello");
+//        messageText.setHorizontalAlignment(JLabel.LEFT);
+        messageText.setFont(new Font("Arial", Font.PLAIN, 26));
+        messagePanel.add(messageText);
 
+//        - Message Time
+        messageTime = new JLabel("12:12");
+//        messageTime.setHorizontalAlignment(JLabel.LEFT);
+        messageTime.setFont(new Font("Arial", Font.PLAIN, 16));
+        messagePanel.add(messageTime);
+
+        chatPanel.add(messagePanel, BorderLayout.WEST);
+
+        scrollPane.add(chatPanel);
         /* =====================
            FOOTER INPUT AREA
         ===================== */
 
         footer = new JPanel(new BorderLayout(8, 0));
-        footer.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+//        footer.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+        footer.setBackground(Color.WHITE);
+        footer.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 
         inputField = new JTextField();
+        inputField.setBorder(new RoundedBorder(10));
 
         sendButton = new JButton("Send");
-        sendButton.addActionListener(e -> {
-            String msg = inputField.getText();
-            addMessage(msg, true);
-        });
+//        sendButton.addActionListener(e -> {
+//            String msg = inputField.getText();
+//            addMessage(msg, true);
+//        });
 
         footer.add(inputField, BorderLayout.CENTER);
         footer.add(sendButton, BorderLayout.EAST);
 
-        add(footer, BorderLayout.SOUTH);
 
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setVisible(true);
+        panel.add(scrollPane, BorderLayout.CENTER);
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(footer, BorderLayout.SOUTH);
     }
 
     /* =====================
@@ -101,46 +85,49 @@ public class chatWindow extends JFrame {
        (Tu listener se yahi call karega)
     ===================== */
 
-    public void addMessage(String message, boolean isSelf) {
-
-        JPanel messageWrapper = new JPanel(new FlowLayout(
-                isSelf ? FlowLayout.RIGHT : FlowLayout.LEFT
-        ));
-        messageWrapper.setOpaque(false);
-
-        JLabel messageLabel = new JLabel("<html><p style='width:200px'>" + message + "</p></html>");
-        messageLabel.setOpaque(true);
-        messageLabel.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
-
-        if (isSelf) {
-            messageLabel.setBackground(new Color(38, 217, 92));
-            messageLabel.setForeground(Color.WHITE);
-        } else {
-            messageLabel.setBackground(new Color(38, 217, 92));
-            messageLabel.setForeground(Color.WHITE);
-        }
-
-        messageWrapper.add(messageLabel);
-        messagesPanel.add(messageWrapper);
-        messagesPanel.add(Box.createVerticalStrut(5));
-
-        messagesPanel.revalidate();
-        messagesPanel.repaint();
-
-        JScrollBar vertical = scrollPane.getVerticalScrollBar();
-        vertical.setValue(vertical.getMaximum());
-    }
-
-    /* =====================
-       GETTERS (For Listener Use)
-    ===================== */
-
-    public JTextField getInputField() {
-        return inputField;
-    }
-
-    public JButton getSendButton() {
-        return sendButton;
+//    public void addMessage(String message, boolean isSelf) {
+//
+//        JPanel messageWrapper = new JPanel(new FlowLayout(
+//                isSelf ? FlowLayout.RIGHT : FlowLayout.LEFT
+//        ));
+//        messageWrapper.setOpaque(false);
+//
+//        JLabel messageLabel = new JLabel("<html><p style='width:200px'>" + message + "</p></html>");
+//        messageLabel.setOpaque(true);
+//        messageLabel.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
+//
+//        if (isSelf) {
+//            messageLabel.setBackground(new Color(38, 217, 92));
+//            messageLabel.setForeground(Color.WHITE);
+//        } else {
+//            messageLabel.setBackground(new Color(38, 217, 92));
+//            messageLabel.setForeground(Color.WHITE);
+//        }
+//
+//        messageWrapper.add(messageLabel);
+//        messagePanel.add(messageWrapper);
+//        messagePanel.add(Box.createVerticalStrut(5));
+//
+//        messagePanel.revalidate();
+//        messagePanel.repaint();
+//
+//        JScrollBar vertical = scrollPane.getVerticalScrollBar();
+//        vertical.setValue(vertical.getMaximum());
+//    }
+//
+//    /* =====================
+//       GETTERS (For Listener Use)
+//    ===================== */
+//
+//    public JTextField getInputField() {
+//        return inputField;
+//    }
+//
+//    public JButton getSendButton() {
+//        return sendButton;
+//    }
+    public static void main(String[] args) {
+        new chatWindow("Tilak");
     }
 
 }

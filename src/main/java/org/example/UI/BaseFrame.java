@@ -8,6 +8,7 @@ public class BaseFrame extends JFrame {
     protected final JPanel panel , wrapper;
     protected JPanel  fieldBlock , fieldWrapper;
     public BaseFrame(){
+        setTitle("ChatHub");
         setSize(1080, 1000);
         setLayout(new BorderLayout());
         setLocationRelativeTo(null);
