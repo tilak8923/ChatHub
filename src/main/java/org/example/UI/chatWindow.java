@@ -1,7 +1,6 @@
 package org.example.UI;
 import javax.swing.*;
 import java.awt.*;
-import java.sql.Time;
 import java.time.LocalTime;
 
 public class chatWindow extends ChatWindowBase {

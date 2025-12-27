@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ChatWindowBase extends JFrame {
-    protected JLabel header;
     protected final JPanel panel , wrapper;
     public ChatWindowBase() {
         setSize(1080, 1000);
