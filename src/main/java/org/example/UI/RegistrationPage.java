@@ -18,23 +18,9 @@ public class RegistrationPage extends BaseFrame {
         JLabel signInLabel, signIn;
 
     public RegistrationPage(){
-
 //      Header
         header.setText("Register To Continue");
 //      Header
-
-//      FieldWrapper
-        fieldWrapper = new JPanel(new BorderLayout());
-        fieldWrapper.setBackground(Color.WHITE);
-        fieldWrapper.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200));
-
-//      FieldBlock: Initializing Field Block That aligned Fields in the left side
-        fieldBlock = new JPanel();
-        fieldBlock.setLayout(new BoxLayout(fieldBlock, BoxLayout.Y_AXIS));
-        fieldBlock.setBackground(new Color(255, 255, 255));
-
-//      Field Block
-
 
 //      nameLabel
         nameLabel = new JLabel("Name");

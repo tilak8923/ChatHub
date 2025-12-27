@@ -41,4 +41,23 @@ public class DBOperation {
             e.printStackTrace();
         }
     }
+    public static int getUserId(String username) {
+        int userId = 0;
+        Connection conn = DBConnection.createConnection();
+        try {
+            String sql = "SELECT user_id FROM users WHERE username = ?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, username);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()){
+                userId = rs.getInt(1);
+            }
+            else System.out.println("User '" + username + "' not found in database.");
+        }
+        catch (Exception e)
+            {
+            e.printStackTrace();
+            }
+        return userId;
+    }
 }

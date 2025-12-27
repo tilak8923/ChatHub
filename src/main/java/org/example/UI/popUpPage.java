@@ -1,7 +1,13 @@
 package org.example.UI;
 
+import org.example.DataBaseConnection.DBOperation;
+import org.example.DataBaseConnection.Messages;
+
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Connection;
+
+import static org.example.DataBaseConnection.DBOperation.getUserId;
 
 public class popUpPage extends PopUpBase {
     public popUpPage(String message, String description, String buttonName){
@@ -14,10 +20,12 @@ public class popUpPage extends PopUpBase {
     public popUpPage(String message, String description, String buttonName , String name){
         super(message,description,buttonName);
         Button.addActionListener(e -> {
-            new chatWindow(name);
+
+            new chatWindow(name, DBOperation.getUserId(name));
             this.dispose();
         });
     }
+
 //    ************************* For testing Purpose *************************
 
     public static void main(String[] args) {

@@ -95,8 +95,6 @@ public class Messages {
         catch (SQLException e){
             e.printStackTrace();
         }
-
-
     }
     public static void main(String[] args){
         Messages.fetchMessage();

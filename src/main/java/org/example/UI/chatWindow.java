@@ -1,8 +1,9 @@
 package org.example.UI;
+import org.example.DataBaseConnection.Messages;
+
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalTime;
-
 public class chatWindow extends ChatWindowBase {
 
      JScrollPane scrollPane;
@@ -13,12 +14,13 @@ public class chatWindow extends ChatWindowBase {
      JButton sendButton;
      JPanel messageWrapper;
      protected String userName;
+     protected int user_id;
 
-    public chatWindow(String username) {
+    public chatWindow(String username , int user_id) {
+        this.user_id = user_id;
         this.userName = username;
 
         setTitle("ChatHub - " + username);
-
 
         /* =====================
            MESSAGE AREA
@@ -26,7 +28,6 @@ public class chatWindow extends ChatWindowBase {
             messagePanel = new JPanel();
             messagePanel.setLayout(new BoxLayout(messagePanel, BoxLayout.Y_AXIS));
             messagePanel.setBackground(new Color(255, 255, 255));
-
 
 //        for (int i = 0 ; i<10 ;i++) {
 //            messageWrapper = new JPanel();
@@ -81,7 +82,9 @@ public class chatWindow extends ChatWindowBase {
         sendButton.addActionListener(e -> {
             String name = getUserName();
             String text = inputField.getText();
-            String time = getCurrentTime();
+//            String time = getCurrentTime();
+            String time = "2026-12-25T16:29";
+            Messages.sendMessage(user_id, text , time);
             addMessage(name,text, time);
         });
 

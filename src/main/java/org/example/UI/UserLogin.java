@@ -84,7 +84,8 @@ public class UserLogin extends BaseFrame {
             String name = usernameTextField.getText();
             String pass = passwordTextField.getText();
             if (name.isEmpty() || pass.isEmpty()){
-                JOptionPane.showMessageDialog(null, "Please enter your username and password");
+//                JOptionPane.showMessageDialog(null, "Please enter your username and password");
+                new ErrorPage("Error!!","Please enter your username and password" , "Ok");
             }else {
                 boolean flag = checkLogin(name , pass);
                 if(flag) {
