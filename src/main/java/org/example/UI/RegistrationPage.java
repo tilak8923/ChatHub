@@ -143,7 +143,7 @@ public class RegistrationPage extends BaseFrame {
         signIn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                new UserLogin();
+                new UserLogin().setVisible(true);
                 dispose();
             }
         });

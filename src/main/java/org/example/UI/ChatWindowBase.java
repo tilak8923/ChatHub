@@ -18,6 +18,7 @@ public class ChatWindowBase extends JFrame {
 //        panel.setMinimumSize(new Dimension(750, 450));
         panel.setPreferredSize(new Dimension(750, 450));
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+//        panel.setLayout(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(40, 50, 40, 50));
         panel.setBackground(new Color(255, 255, 255));
 
