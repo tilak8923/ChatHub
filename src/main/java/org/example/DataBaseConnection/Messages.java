@@ -1,6 +1,5 @@
 package org.example.DataBaseConnection;
 
-import com.mysql.cj.protocol.Message;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -46,6 +45,8 @@ public class Messages {
     public void setUser_id(int user_id) {
         this.user_id = user_id;
     }
+
+//    Used to fetch Data From DB
     public static void fetchMessage(){
 
         List <Messages>clients = new ArrayList<>();
@@ -74,8 +75,8 @@ public class Messages {
             System.out.println(n.time);
         }
     }
-//    insert - chatData - message , time, user_id
 
+//    Used to Send Message to the DataBase
     public static void sendMessage(int user_id, String message ,String time ){
         try {
             String query = "Insert into chatdata(user_id , message, chat_time) values(?,?,?)";
@@ -96,10 +97,36 @@ public class Messages {
             e.printStackTrace();
         }
     }
-    public static void main(String[] args){
-        Messages.fetchMessage();
-        Messages.sendMessage(2,"Hii Guys" , "2025-12-25T16:29");
+
+//    Used to get Chat ID
+    public static int getChatId(int user_id, String chat_time){
+        int id = 0;
+        Connection con = DBConnection.createConnection();
+        String sql = "select chat_id from chatdata c, users u where u.user_id =? c.chat_time =?";
+        try{
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setInt(1, user_id);
+            stmt.setString(2, chat_time);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()){
+                id =  rs.getInt("chat_id");
+            }
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+        return id;
     }
+
+//    ***************** Testing purpose *****************
+
+//    public static void main(String[] args){
+//        Messages.fetchMessage();
+//        Messages.sendMessage(2,"Hii Guys" , "2025-12-25T16:29");
+//    }
+
+//    ***************** Testing purpose *****************
+
 }
 
 

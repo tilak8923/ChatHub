@@ -145,5 +145,12 @@ public class UserLogin extends BaseFrame {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }
