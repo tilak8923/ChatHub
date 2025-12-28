@@ -1,6 +1,5 @@
 package org.example.UI;
 
-import org.example.DataBaseConnection.DBConnection;
 import org.example.DataBaseConnection.DBOperation;
 
 
@@ -8,7 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.Connection;
 
 public class RegistrationPage extends BaseFrame {
         JLabel usernameLabel , passwordLabel, nameLabel;
@@ -147,7 +145,6 @@ public class RegistrationPage extends BaseFrame {
         String Name = nameTextField.getText();
         String userName = usernameTextField.getText();
         String  Password = passwordTextField.getText();
-        Connection conn = DBConnection.createConnection();
 
         DBOperation operation = new DBOperation();
         operation.insertUser(Name , userName, Password);

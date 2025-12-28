@@ -5,12 +5,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnection {
-//    private final String DB_URL = "mysql://root:VCXWjZKNxXgBxUcxEQkjijLXPWMNOnap@switchback.proxy.rlwy.net:20678/railway";
-//    private static final String DB_URL = "mysql://switchback.proxy.rlwy.net:20678/railway";
-//    private static final String DB_PASSWORD = "VCXWjZKNxXgBxUcxEQkjijLXPWMNOnap";
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/ChatAppDB";
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "tilak@head";
+//    private static final String DB_URL = "jdbc:mysql://localhost:3306/ChatAppDB";
+//    private static final String DB_USER = "root";
+//    private static final String DB_PASSWORD = "tilak@head";
+    private static final String DB_URL = "jdbc:mysql://f988uc.h.filess.io:61002/ChatHub_hangpageme";
+    private static final String DB_USER = "ChatHub_hangpageme";
+    private static final String DB_PASSWORD = "8b6e8fbb4ff5235ad02326512074b3ce7f4f610e";
     public static Connection createConnection() {
         Connection con = null;
         try {

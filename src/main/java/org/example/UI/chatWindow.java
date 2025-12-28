@@ -1,9 +1,14 @@
 package org.example.UI;
+import org.example.DataBaseConnection.DBOperation;
 import org.example.DataBaseConnection.Messages;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
+import java.util.Date;
+import java.util.Locale;
+
 public class chatWindow extends ChatWindowBase {
 
      JScrollPane scrollPane;
@@ -80,13 +85,19 @@ public class chatWindow extends ChatWindowBase {
 
         sendButton = new JButton("Send");
         sendButton.addActionListener(e -> {
-            String name = getUserName();
+            DBOperation obj = new DBOperation();
+            String name = obj.getName(user_id);
             String text = inputField.getText();
-//            String time = getCurrentTime();
-            String time = "2026-12-25T16:29";
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            String time = sdf.format(new Date());
+
             Messages.sendMessage(user_id, text , time);
-            addMessage(name,text, time);
+            String[] arr = time.split(" ");
+            addMessage(name,text, arr[1]); // here addMessage add this msg in UI where we need only time
         });
+//        here we take Name from users by user_id that is get in parameterized constructor
+//        and then sendMessage with this data user_id , msg and time
 
         footer.add(inputField, BorderLayout.CENTER);
         footer.add(sendButton, BorderLayout.EAST);
@@ -106,9 +117,7 @@ public class chatWindow extends ChatWindowBase {
         return LocalTime.now().toString();
     }
 
-    protected String getUserName() {
-        return userName;
-    }
+
 
     /* =====================
        MESSAGE BOX UI METHOD
@@ -193,10 +202,11 @@ public class chatWindow extends ChatWindowBase {
         messagePanel.revalidate();
         messagePanel.repaint();
     }
+//
 //    public static void main(String[] args) {
-//        new chatWindow("Sanskriti").setVisible(true);
+//        new chatWindow("t" , 1).setVisible(true);
 //    }
-
+//
 }
 
 

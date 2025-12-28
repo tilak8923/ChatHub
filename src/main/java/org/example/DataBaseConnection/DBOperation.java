@@ -2,8 +2,16 @@ package org.example.DataBaseConnection;
 
 import java.sql.Connection;
 import java.sql.*;
-
-public class DBOperation {
+interface DBOperations{
+    void insertUser(String name, String userName,String password);
+    void updatePassword(String username, String newPassword);
+    int getUserId(String userName);
+    String getUserName(int user_id);
+    String getPassword(int user_id);
+    String getName(int user_id);
+}
+public class DBOperation implements DBOperations{
+    @Override
     public void insertUser(String name, String username, String password) {
         Connection conn = DBConnection.createConnection();
         try {
@@ -16,9 +24,16 @@ public class DBOperation {
             int rows = pst.executeUpdate();
             if (rows > 0) System.out.println("User '" + name + "' registered successfully.");
         } catch (SQLException e) { e.printStackTrace(); }
+        finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
-
+    @Override
     public void updatePassword(String username, String newPassword) {
         String checkSql = "SELECT username FROM users WHERE username = ?";
         String updateSql = "UPDATE users SET password = ? WHERE username = ?";
@@ -36,12 +51,14 @@ public class DBOperation {
                 } else {
                     System.out.println("Update Failed: Username '" + username + "' not found in database.");
                 }
+                conn.close();
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    public static int getUserId(String username) {
+    @Override
+    public int getUserId(String username) {
         int userId = 0;
         Connection conn = DBConnection.createConnection();
         try {
@@ -58,6 +75,142 @@ public class DBOperation {
             {
             e.printStackTrace();
             }
+        finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
         return userId;
     }
+
+    @Override
+    public String getUserName(int user_id) {
+        Connection con = DBConnection.createConnection();
+        String name = "";
+        try{
+            String query = "Select username from users where username = ?";
+            PreparedStatement st = con.prepareStatement(query);
+            st.setInt(1, user_id);
+            ResultSet rs = st.executeQuery();
+            if(rs.next()){
+                name = rs.getString(1);
+            }
+            else {
+                System.out.println("User not found in database.");
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return name;
+    }
+
+    @Override
+    public String getPassword(int user_id) {
+        Connection conn = DBConnection.createConnection();
+        String password = "";
+        try{
+            PreparedStatement pst = conn.prepareStatement("Select password from users where user_id = ?");
+            pst.setInt(1, user_id);
+            ResultSet rs = pst.executeQuery();
+            if(rs.next()){
+                password = rs.getString(1);
+            }
+            else {
+                System.out.println("User not found in database.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return password;
+    }
+
+    @Override
+    public String getName(int user_id) {
+        Connection con = DBConnection.createConnection();
+        String name = "";
+        try{
+            PreparedStatement pst = con.prepareStatement("Select name from users where user_id = ?");
+            pst.setInt(1, user_id);
+            ResultSet rs = pst.executeQuery();
+            if(rs.next()){
+                name =  rs.getString(1);
+            }
+            else System.out.println("User not found in database.");
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return name;
+    }
+    public String getCurrentTime(int chat_id) {
+        Connection con = DBConnection.createConnection();
+        String time = "";
+        try{
+            PreparedStatement pst = con.prepareStatement("Select chat_time from chatdata where chat_id = ?");
+            pst.setInt(1, chat_id);
+            ResultSet rs = pst.executeQuery();
+            if(rs.next()){
+                time = rs.getString(1);
+            }
+            else System.out.println("User not found in database.");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        String[] arr = time.split(" ");
+//        System.out.println(arr[1]);
+        return arr[0];
+    }
+//    ***************** Testing purpose *****************
+
+//    public static void main(String[] args) {
+//        DBOperation dbo = new DBOperation();
+//        dbo.getCurrentTime(101);
+//    }
+
+//    ***************** Testing purpose *****************
 }
+
+// Create Db connection
+// String SQLQurey - like "select name, username from table"
+// Create Statement st - Statement(limited queries can be run) / preparedStatement (Anytype of Query can be run)
+// ResultSet rs = st.executeQuery();
+// if(rs.next()){
+//    String username = getString(2);
+//    String name = getString(1);
+//}
+//return username;
+
