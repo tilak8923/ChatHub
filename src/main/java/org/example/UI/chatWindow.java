@@ -22,6 +22,7 @@ public class chatWindow extends ChatWindowBase {
      protected int user_id;
 
     public chatWindow(String username , int user_id) {
+        System.out.println("Chat Window Created");
         this.user_id = user_id;
         this.userName = username;
 
@@ -40,40 +41,6 @@ public class chatWindow extends ChatWindowBase {
 //            messageWrapper.setBackground(new Color(239, 238, 238, 238));
 //            messageWrapper.setBorder(new RoundedBorder(10));
 //            messageWrapper.setMinimumSize(new Dimension(Integer.MAX_VALUE, 40));
-//
-//
-////      Adding Properties Of Message Panel
-////        - Message Name
-//            messageName = new JLabel("Tilak");
-//            messageName.setFont(new Font("Arial", Font.PLAIN, 10));
-//
-////        - Message Text
-//            messageText = new JTextArea("hey what's up , this is tilak tiwari , I'm writing this message toI'm writing this message to,I'm writing this message to show the ");
-////            messageText = new JTextArea("hey what's up ");
-//            messageText.setFont(new Font("Arial", Font.PLAIN, 12));
-//            messageText.setLineWrap(true);
-//            messageText.setWrapStyleWord(true);
-//            messageText.setEditable(false);
-//            messageText.setOpaque(false); // Makes it look like a JLabel
-//            messageText.setAlignmentX(Component.LEFT_ALIGNMENT);
-//
-////        - Message Time
-//            messageTime = new JLabel("12:12");
-//            messageTime.setFont(new Font("Arial", Font.PLAIN, 9));
-//
-//
-//            messageWrapper.add(messageName);
-//            messageWrapper.add(messageText);
-//            messageWrapper.add(messageTime);
-//
-//
-//            messagePanel.add(messageWrapper);
-//            messagePanel.add(Box.createVerticalStrut(10));
-//        }
-
-        /* =====================
-           FOOTER INPUT AREA
-        ===================== */
 
         footer = new JPanel(new BorderLayout(8, 0));
 //        footer.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
@@ -116,55 +83,6 @@ public class chatWindow extends ChatWindowBase {
     protected String getCurrentTime() {
         return LocalTime.now().toString();
     }
-
-
-
-    /* =====================
-       MESSAGE BOX UI METHOD
-       (Tu listener se yahi call karega)
-    ===================== */
-
-//    public void addMessage(String message, boolean isSelf) {
-//
-//        JPanel messageWrapper = new JPanel(new FlowLayout(
-//                isSelf ? FlowLayout.RIGHT : FlowLayout.LEFT
-//        ));
-//        messageWrapper.setOpaque(false);
-//
-//        JLabel messageLabel = new JLabel("<html><p style='width:200px'>" + message + "</p></html>");
-//        messageLabel.setOpaque(true);
-//        messageLabel.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
-//
-//        if (isSelf) {
-//            messageLabel.setBackground(new Color(38, 217, 92));
-//            messageLabel.setForeground(Color.WHITE);
-//        } else {
-//            messageLabel.setBackground(new Color(38, 217, 92));
-//            messageLabel.setForeground(Color.WHITE);
-//        }
-//
-//        messageWrapper.add(messageLabel);
-//        messagePanel.add(messageWrapper);
-//        messagePanel.add(Box.createVerticalStrut(5));
-//
-//        messagePanel.revalidate();
-//        messagePanel.repaint();
-//
-//        JScrollBar vertical = scrollPane.getVerticalScrollBar();
-//        vertical.setValue(vertical.getMaximum());
-//    }
-//
-//    /* =====================
-//       GETTERS (For Listener Use)
-//    ===================== */
-//
-//    public JTextField getInputField() {
-//        return inputField;
-//    }
-//
-//    public JButton getSendButton() {
-//        return sendButton;
-//    }
 
     public void addMessage(String msg , String text , String time) {
         messageWrapper = new JPanel();

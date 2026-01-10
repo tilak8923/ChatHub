@@ -29,7 +29,7 @@ public class ChatWindowBase extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
     }
-    public static void main(String[] args) {
-        new ChatWindowBase();
-    }
+//    public static void main(String[] args) {
+//        new ChatWindowBase();
+//    }
 }

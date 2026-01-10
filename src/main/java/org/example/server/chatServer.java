@@ -25,7 +25,7 @@ public class chatServer {
                     clientSocket.getOutputStream(), true
             );    // ye client ko message bhejega
             String msg = in.readLine();
-            if(msg.startsWith("LOGIN")){
+            if(msg != null && msg.startsWith("LOGIN")){
                 String[] str = msg.split(" ");
                 String username = str[1];
                 String password = str[2];
@@ -66,7 +66,7 @@ public class chatServer {
         return flag;
     }
 // ***************** Testing Purpose *****************
-    /*
+//    /*
     public static void main(String[] args) {
         int port = 6000;
 
@@ -94,6 +94,6 @@ public class chatServer {
             e.printStackTrace();
         }
     }
-    */
+//    */
 // ***************** Testing Purpose *****************
 }

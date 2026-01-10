@@ -1,6 +1,7 @@
 package org.example.UI;
 
 import org.example.DataBaseConnection.DBConnection;
+import org.example.UI.error.popUpPage;
 
 import javax.swing.*;
 import java.awt.*;

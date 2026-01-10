@@ -1,6 +1,7 @@
 package org.example.UI;
 
-import org.example.DataBaseConnection.DBConnection;
+import org.example.UI.error.ErrorUi;
+import org.example.UI.error.popUpPage;
 import org.example.server.chatClient;
 
 import javax.swing.*;
@@ -11,8 +12,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.sql.*;
-import java.util.Objects;
 
 public class UserLogin extends BaseFrame {
     JLabel  forgetPassword;
@@ -89,16 +88,23 @@ public class UserLogin extends BaseFrame {
         login.addActionListener(e -> {
             String name = usernameTextField.getText();
             String pass = passwordTextField.getText();
-            if (name.isEmpty() || pass.isEmpty()){
-                new ErrorPage("Error!!","Please enter your username and password" , "Ok");
-            }else {
+            if (name.isEmpty()){
+                if(pass.isEmpty()){
+                    new ErrorUi("Warning⚠️","Please enter your username and password","Try Again","warning");
+                }else {
+                    new ErrorUi("Warning⚠️", "Please enter your username", "Try Again", "warning");
+                }
+            }else if (pass.isEmpty()){
+                new ErrorUi("Warning⚠️","Please enter password","Try Again","warning");
+            } else {
                 boolean flag = checkLogin(name , pass);
                 if(flag) {
                     new popUpPage("LOGIN SUCCESSFUL" , "You’re all set and ready to start" ,"Open Chat" , name);
+                    new ErrorUi("All Set" , "You’re all set and ready to start" , "Open Chat" , "success");
                     this.dispose();
                 }
                 else
-                    JOptionPane.showMessageDialog(null, "User Not Exist");
+                    new ErrorUi("Error","User Not Exist","Register", "error");
             }
         });
         panel.add(login);
@@ -139,18 +145,26 @@ public class UserLogin extends BaseFrame {
 
     public static boolean checkLogin(String username, String password){
         boolean flag = false;
-        try (Socket sc = chatClient.createSocket()) {      // Create a new socket by using createSocket func of chatClient class
-            PrintWriter out = new PrintWriter(
-                    sc.getOutputStream(), true
-            );          // PrintWriter used hota h network pr output bhejne ke liye
-            out.println("LOGIN" + " " + username + " " + password);  // mtlb ye server recieve karega
-            BufferedReader in = new BufferedReader(new InputStreamReader(sc.getInputStream())); // ye use hota h input lene ke liye from network jaise scanner use hota tha
-            if(in.readLine().equals("LOGIN_SUCCESS")){
-                System.out.println("Client received: "+ in.readLine());
+        try (Socket sc = chatClient.createSocket()) {
+            // Create a new socket by using createSocket func of chatClient class
+
+            PrintWriter out = new PrintWriter(sc.getOutputStream(), true);
+            // PrintWriter used hota h network pr output bhejne ke liye
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(sc.getInputStream()));
+            // ye use hota h input lene ke liye from network jaise scanner use hota tha
+
+            out.println("LOGIN" + " " + username + " " + password);
+            // mtlb ye server recieve karega
+
+            System.out.println(in.readLine());
+            String response = in.readLine();
+
+            if("LOGIN_SUCCESS".equals(response)){
+                System.out.println("Client received: "+ response);
                 flag = true;
-            }if(in.readLine().equals("LOGIN_FAILED")){
-                System.out.println("Client received: "+ in.readLine());
-                flag = false;
+            }else if("LOGIN_FAILED".equals(response)){
+                System.out.println("Client received: "+ response);
             }
         }catch (Exception e){
             e.printStackTrace();

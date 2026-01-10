@@ -1,4 +1,4 @@
-package org.example.UI;
+package org.example.UI.error;
 
 import javax.swing.*;
 import java.awt.*;
@@ -58,5 +58,8 @@ public class PopUpBase extends JFrame {
         add(panel,  BorderLayout.CENTER);
         setVisible(true);
 
+    }
+    public static void main(String[] args) {
+        new PopUpBase("hello" , "this is error"  , "ok");
     }
 }

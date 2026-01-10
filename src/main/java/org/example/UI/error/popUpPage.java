@@ -1,9 +1,8 @@
-package org.example.UI;
+package org.example.UI.error;
 
 import org.example.DataBaseConnection.DBOperation;
-
-import javax.swing.*;
-import java.awt.*;
+import org.example.UI.UserLogin;
+import org.example.UI.chatWindow;
 
 
 public class popUpPage extends PopUpBase {

@@ -20,7 +20,7 @@ public class chatClient{
 
 
 // ***************** Testing Purpose *****************
-    /*
+//    /*
     public static void main(String[] args) {
 
         String serverIp = "localhost"; // Railway URL later
@@ -49,7 +49,7 @@ public class chatClient{
             e.printStackTrace();
         }
     }
-    */
+//    */
 // ***************** Testing Purpose *****************
 }
 
