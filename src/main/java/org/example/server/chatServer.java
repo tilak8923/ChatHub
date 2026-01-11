@@ -55,7 +55,20 @@ public class chatServer {
                     System.out.println("Server says: REGISTER_FAILED" + " "+ false);
                 }
             }
-//            FORGETPASSWORD
+            else if(msg != null && msg.startsWith("FORGOT_PASSWORD")){
+                String[] str = msg.split("\\|");
+                String username = str[1];
+                String newPassword = str[2];
+                boolean flag = DBOperation.updatePassword(username, newPassword);
+                if(flag){
+                    out.println("UPDATE_SUCCESS");
+                    System.out.println("Server says: UPDATE_SUCCESS" + " " + true);
+                }
+                else{
+                    out.println("UPDATE_FAILED");
+                    System.out.println("Server says: UPDATE_FAILED" + " " + false);
+                }
+            }
         }
         catch (IOException e) { e.printStackTrace(); }
         catch (SQLException e) { throw new RuntimeException(e); }
