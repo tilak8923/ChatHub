@@ -1,6 +1,8 @@
 package org.example.ui;
 
 import org.example.DataBaseConnection.DBOperation;
+import org.example.server.chatClient;
+import org.example.ui.popups.ErrorUi;
 import org.example.ui.popups.popUpPage;
 import org.example.ui.utils.RoundedBorder;
 
@@ -9,6 +11,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 
 public class RegistrationPage extends BaseFrame {
         JLabel usernameLabel , passwordLabel, nameLabel;
@@ -91,15 +97,21 @@ public class RegistrationPage extends BaseFrame {
         Register.setFont(new Font("Serif", Font.BOLD, 38));
 
         Register.addActionListener(e -> {
-            String name = usernameTextField.getText();
+            String name = nameTextField.getText();
+            String userName = usernameTextField.getText();
             String pass = passwordTextField.getText();
-            if (name.isEmpty() || pass.isEmpty()){
-                JOptionPane.showMessageDialog(null, "Please Enter your Name, username and password");
+            if (name.isEmpty()){
+                if (userName.isEmpty()){
+                    if(pass.isEmpty()){
+                        new ErrorUi("Warning⚠️","Please Enter your Name , Username and Password","Try Again","warning");
+                    }else {
+                        new ErrorUi("Warning⚠️", "Please Enter your Name and Username", "Try Again", "warning");
+                    }
+                }else {
+                    new ErrorUi("Warning⚠️", "Please Enter your Name", "Try Again", "warning");
+                }
             }else {
-                addUser();
-                new popUpPage("REGISTERED SUCCESSFULLY","Your details have been successfully submitted \n" +
-                        "You can now login","Login");
-                this.dispose();
+                addUser(name, userName, pass);
             }
         });
         panel.add(Register);
@@ -143,12 +155,28 @@ public class RegistrationPage extends BaseFrame {
 //        setVisible(true);
 //        setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
-    public void addUser() {
-        String Name = nameTextField.getText();
-        String userName = usernameTextField.getText();
-        String  Password = passwordTextField.getText();
+    public boolean addUser(String name , String username , String password) {
+        boolean flag = false;
+        try (Socket sc = chatClient.createSocket()) {
 
-        DBOperation operation = new DBOperation();
-        operation.insertUser(Name , userName, Password);
+            PrintWriter out = new PrintWriter(sc.getOutputStream(), true);
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(sc.getInputStream()));
+
+            out.println("REGISTER" + "|" + name + "|" + username + "|" + password);
+
+            String response = in.readLine();
+
+            if("REGISTER_SUCCESS".equals(response)){
+                System.out.println("Client received: "+ response);
+                flag = true;
+            }else if("REGISTER_FAILED".equals(response)){
+                System.out.println("Client received: "+ response);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return flag;
     }
+//
 }

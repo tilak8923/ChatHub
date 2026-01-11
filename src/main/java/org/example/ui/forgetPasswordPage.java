@@ -83,13 +83,13 @@ public class forgetPasswordPage extends BaseFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
     }
-    public void resetPass(String name , String pass){
+    public void resetPass(String username , String newPass){
         String Sql = "Update users set password = ? where username = ?";
         try {
             Connection conn = DBConnection.createConnection();
             PreparedStatement checkStmt = conn.prepareStatement(Sql);
-            checkStmt.setString(1, pass);
-            checkStmt.setString(2, name);
+            checkStmt.setString(1, newPass);
+            checkStmt.setString(2, username);
             int rows = checkStmt.executeUpdate();
             if (rows > 0) {
                 new popUpPage("Password Changed!","You’ve successfully completed your\n" +

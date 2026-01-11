@@ -18,31 +18,44 @@ public class chatServer {
             serverSocket = new ServerSocket(port);
             Socket clientSocket = serverSocket.accept(); // wait for client
             System.out.println("Client connected");
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(clientSocket.getInputStream())
-            );    // ye in me message lega jo client ne bheja hai
-            PrintWriter out = new PrintWriter(
-                    clientSocket.getOutputStream(), true
-            );    // ye client ko message bhejega
+
+            BufferedReader in = new BufferedReader( new InputStreamReader(clientSocket.getInputStream()));
+            // ye in me message lega jo client ne bheja hai
+
+            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+            // ye client ko message bhejega
+
             String msg = in.readLine();
             if(msg != null && msg.startsWith("LOGIN")){
-                String[] str = msg.split(" ");
+                String[] str = msg.split("\\|");
                 String username = str[1];
                 String password = str[2];
-                Boolean flag = DBOperation.loginAuth(username , password);  // ye jo function ye check karega DB me user hai ya nhi
+                boolean flag = DBOperation.loginAuth(username , password);  // ye jo function ye check karega DB me user hai ya nhi
                 if(flag){
                     out.println("LOGIN_SUCCESS");  //sending to client
-                    System.out.println("Server says: LOGIN_SUCCESS" + " "+ true);
+                    System.out.println("Server says: LOGIN_SUCCESS" + " "+ true);  // for Debugging
                 }
                 else {
                     out.println("LOGIN_FAILED");   //sending to client
                     System.out.println("Server says: LOGIN_FAILED" + " "+ false);
                 }
             }
-            else {
-                out.println("LOGIN_FAILED");
-                System.out.println("Server says: LOGIN_FAILED");
+            else if (msg != null && msg.startsWith("REGISTER")){
+                String[] str = msg.split("\\|");
+                String name = str[1];
+                String username = str[2];
+                String password = str[3];
+                boolean flag = DBOperation.insertUser(name, username, password);
+                if(flag){
+                    out.println("REGISTER_SUCCESS");  //sending to client
+                    System.out.println("Server says: REGISTER_SUCCESS" + " "+ true);
+                }
+                else {
+                    out.println("REGISTER_FAILED");   //sending to client
+                    System.out.println("Server says: REGISTER_FAILED" + " "+ false);
+                }
             }
+//            FORGETPASSWORD
         }
         catch (IOException e) { e.printStackTrace(); }
         catch (SQLException e) { throw new RuntimeException(e); }

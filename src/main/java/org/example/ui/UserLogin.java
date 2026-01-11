@@ -172,7 +172,7 @@ public class UserLogin extends BaseFrame {
 
     public static boolean checkLogin(String username, String password){
         boolean flag = false;
-        try (Socket sc = chatClient.createSocket()) {
+        try (Socket sc = new Socket("localhost" , 6000);) {
             // Create a new socket by using createSocket func of chatClient class
 
             PrintWriter out = new PrintWriter(sc.getOutputStream(), true);
@@ -181,7 +181,7 @@ public class UserLogin extends BaseFrame {
             BufferedReader in = new BufferedReader(new InputStreamReader(sc.getInputStream()));
             // ye use hota h input lene ke liye from network jaise scanner use hota tha
 
-            out.println("LOGIN" + " " + username + " " + password);
+            out.println("LOGIN" + "|" + username + "|" + password);
             // mtlb ye server recieve karega
 
             String response = in.readLine();

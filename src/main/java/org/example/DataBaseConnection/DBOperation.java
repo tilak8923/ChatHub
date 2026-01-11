@@ -3,7 +3,6 @@ package org.example.DataBaseConnection;
 import java.sql.Connection;
 import java.sql.*;
 interface DBOperations{
-    void insertUser(String name, String userName,String password);
     void updatePassword(String username, String newPassword);
     int getUserId(String userName);
     String getUserName(int user_id);
@@ -11,26 +10,29 @@ interface DBOperations{
     String getName(int user_id);
 }
 public class DBOperation implements DBOperations{
-    @Override
-    public void insertUser(String name, String username, String password) {
-        Connection conn = DBConnection.createConnection();
-        try {
-            String sql = "INSERT INTO users (name, username, password) VALUES (?, ?, ?)";
-            PreparedStatement pst = conn.prepareStatement(sql);
-            pst.setString(1, name);
-            pst.setString(2, username);
-            pst.setString(3, password);
-
-            int rows = pst.executeUpdate();
-            if (rows > 0) System.out.println("User '" + name + "' registered successfully.");
-        } catch (SQLException e) { e.printStackTrace(); }
-        finally {
+    public static boolean insertUser(String name, String username, String password) {
+        boolean flag = false;
+        try (Connection conn = DBConnection.createConnection()) {
             try {
+                String sql = "INSERT INTO users (name, username, password) VALUES (?, ?, ?)";
+                PreparedStatement pst = conn.prepareStatement(sql);
+                pst.setString(1, name);
+                pst.setString(2, username);
+                pst.setString(3, password);
+
+                int rows = pst.executeUpdate();
+                if (rows > 0) {
+                    System.out.println("User '" + name + "' registered successfully.");
+                    flag = true;
+                }
                 conn.close();
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return flag;
     }
 
     @Override
@@ -60,27 +62,21 @@ public class DBOperation implements DBOperations{
     @Override
     public int getUserId(String username) {
         int userId = 0;
-        Connection conn = DBConnection.createConnection();
-        try {
-            String sql = "SELECT user_id FROM users WHERE username = ?";
-            PreparedStatement pst = conn.prepareStatement(sql);
-            pst.setString(1, username);
-            ResultSet rs = pst.executeQuery();
-            if (rs.next()){
-                userId = rs.getInt(1);
-            }
-            else System.out.println("User '" + username + "' not found in database.");
-        }
-        catch (Exception e)
-            {
-            e.printStackTrace();
-            }
-        finally {
+        try (Connection conn = DBConnection.createConnection()) {
             try {
+                String sql = "SELECT user_id FROM users WHERE username = ?";
+                PreparedStatement pst = conn.prepareStatement(sql);
+                pst.setString(1, username);
+                ResultSet rs = pst.executeQuery();
+                if (rs.next()) {
+                    userId = rs.getInt(1);
+                } else System.out.println("User '" + username + "' not found in database.");
                 conn.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return userId;
     }
@@ -145,26 +141,19 @@ public class DBOperation implements DBOperations{
 
     @Override
     public String getName(int user_id) {
-        Connection con = DBConnection.createConnection();
         String name = "";
-        try{
+        try (Connection con = DBConnection.createConnection()) {
             PreparedStatement pst = con.prepareStatement("Select name from users where user_id = ?");
             pst.setInt(1, user_id);
             ResultSet rs = pst.executeQuery();
-            if(rs.next()){
-                name =  rs.getString(1);
+            if (rs.next()) {
+                name = rs.getString(1);
+            } else {
+                System.out.println("User not found in database.");
             }
-            else System.out.println("User not found in database.");
-        }
-        catch (SQLException e){
+            con.close();
+        } catch (SQLException e) {
             e.printStackTrace();
-        }
-        finally {
-            try {
-                con.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
         return name;
     }
@@ -198,20 +187,17 @@ public class DBOperation implements DBOperations{
     public static Boolean loginAuth(String username, String password) throws SQLException {
         boolean flag;
 
-        Connection conn = DBConnection.createConnection();
-        String checkSql = "select name from users where username = ? and password =?";
-        try {
+        try (Connection conn = DBConnection.createConnection()) {
+            String checkSql = "select name from users where username = ? and password =?";
             PreparedStatement checkStmt = conn.prepareStatement(checkSql);
             checkStmt.setString(1, username);
             checkStmt.setString(2, password);
             ResultSet rs = checkStmt.executeQuery();
             flag = rs.next();
-            System.out.println("User Name: " + rs.getString(1)+" "+ flag);
+            System.out.println("User Name: " + rs.getString(1) + " " + flag);
+            conn.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
-        finally {
-            conn.close();
         }
         return flag;
     }
