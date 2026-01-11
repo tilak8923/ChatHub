@@ -3,7 +3,7 @@ package org.example.DataBaseConnection;
 import java.sql.Connection;
 import java.sql.*;
 interface DBOperations{
-    void updatePassword(String username, String newPassword);
+    //void updatePassword(String username, String newPassword);
     int getUserId(String userName);
     String getUserName(int user_id);
     String getPassword(int user_id);
@@ -35,8 +35,8 @@ public class DBOperation implements DBOperations{
         return flag;
     }
 
-    @Override
-    public void updatePassword(String username, String newPassword) {
+    public static boolean updatePassword(String username, String newPassword) {
+        boolean flag= false;
         String checkSql = "SELECT username FROM users WHERE username = ?";
         String updateSql = "UPDATE users SET password = ? WHERE username = ?";
         try (Connection conn = DBConnection.createConnection()) {
@@ -49,6 +49,7 @@ public class DBOperation implements DBOperations{
                         updatePst.setString(2, username);
                         updatePst.executeUpdate();
                         System.out.println("Success: Password updated for " + username);
+                        flag= true;
                     }
                 } else {
                     System.out.println("Update Failed: Username '" + username + "' not found in database.");
@@ -58,6 +59,7 @@ public class DBOperation implements DBOperations{
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return flag;
     }
     @Override
     public int getUserId(String username) {
