@@ -1,11 +1,17 @@
 package org.example.ui;
 
 import org.example.DataBaseConnection.DBConnection;
+import org.example.server.chatClient;
+import org.example.ui.popups.ErrorUi;
 import org.example.ui.popups.popUpPage;
 import org.example.ui.utils.RoundedBorder;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.sql.*;
 
 public class forgetPasswordPage extends BaseFrame {
@@ -67,12 +73,39 @@ public class forgetPasswordPage extends BaseFrame {
 
         updatePassword.addActionListener(e -> {
             System.out.println("BUTTON CLICKED");
-            String name = usernameTextField.getText();
-            String pass = newPasswordTextField.getText();
-            if (name.isEmpty() || pass.isEmpty()){
-                JOptionPane.showMessageDialog(null, "Please enter your username and password");
+            String username = usernameTextField.getText();
+            String newPass = newPasswordTextField.getText();
+            if (username.isEmpty()){
+                if(newPass.isEmpty()){
+                    new ErrorUi("Warning⚠️","Please enter your username and password","Try Again","warning");
+                }else {
+                    new ErrorUi("Warning⚠️", "Please enter your username", "Try Again", "warning");
+                }
+            }else if (newPass.isEmpty()){
+                new ErrorUi("Warning⚠️","Please enter password","Try Again","warning");
             }else {
-                resetPass(name , pass);
+                new SwingWorker<Boolean, Void>() {
+
+                    @Override
+                    protected Boolean doInBackground() {
+                        return resetPass(username , newPass); // network call
+                    }
+                    @Override
+                    protected void done() {
+                        try {
+                            boolean flag = get(); // result from background
+                            if (flag) {
+                                new popUpPage("Password Changed!","You’ve successfully completed your" +"password reset","Login");
+//                                new ErrorUi("All Set", "You’re all set and ready to start", "Open Chat", "success");
+                                dispose();
+                            } else
+                                new ErrorUi("Error", "Password Not Update", "Try Again", "error");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            new ErrorUi("Error","Server not responding","Try Again", "error");
+                        }
+                    }
+                }.execute();
             }
         });
         panel.add(updatePassword);
@@ -83,24 +116,22 @@ public class forgetPasswordPage extends BaseFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
     }
-    public void resetPass(String username , String newPass){
-        String Sql = "Update users set password = ? where username = ?";
-        try {
-            Connection conn = DBConnection.createConnection();
-            PreparedStatement checkStmt = conn.prepareStatement(Sql);
-            checkStmt.setString(1, newPass);
-            checkStmt.setString(2, username);
-            int rows = checkStmt.executeUpdate();
-            if (rows > 0) {
-                new popUpPage("Password Changed!","You’ve successfully completed your\n" +
-                        "password reset","Login");
-            }
-            else {
-                JOptionPane.showMessageDialog(null, "Failed to reset your password");
-            }
+    public Boolean resetPass(String username , String newPass){
+        boolean flag = false;
+        try (Socket sc = chatClient.createSocket()) {
+            PrintWriter out = new PrintWriter(sc.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(sc.getInputStream()));
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+            out.println("FORGET_PASSWORD" + "|" + username + "|" + newPass);
+
+            String response = in.readLine();
+            if("UPDATE_SUCCESS".equals(response)){
+                System.out.println("Client received: "+ response);
+                flag = true;
+            }else if("UPDATE_FAILED".equals(response)){
+                System.out.println("Client received: "+ response);
+            }
+        }catch (Exception e){e.printStackTrace();}
+        return flag;
     }
 }

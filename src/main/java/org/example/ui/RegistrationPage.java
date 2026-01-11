@@ -1,6 +1,5 @@
 package org.example.ui;
 
-import org.example.DataBaseConnection.DBOperation;
 import org.example.server.chatClient;
 import org.example.ui.popups.ErrorUi;
 import org.example.ui.popups.popUpPage;
@@ -111,7 +110,26 @@ public class RegistrationPage extends BaseFrame {
                     new ErrorUi("Warning⚠️", "Please Enter your Name", "Try Again", "warning");
                 }
             }else {
-                addUser(name, userName, pass);
+                new SwingWorker<Boolean, Void>(){
+                    @Override
+                    protected Boolean doInBackground() throws Exception {
+                        return addUser(name, userName, pass);
+                    }
+                    @Override
+                    protected void done() {
+                        try {
+                            boolean flag = get();
+                            if (flag) {
+                                new popUpPage("Registered SUCCESSFUL", "You’re all set and ready to start", "Login");
+                                dispose();
+                            }else {
+                                new ErrorUi("Error", "User Not Registered", "Try Again", "error");
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                }.execute();
             }
         });
         panel.add(Register);
@@ -150,10 +168,6 @@ public class RegistrationPage extends BaseFrame {
         panel.add(signInWrapper);
 //      **SignIn Setup**
 
-//        wrapper.add(panel);
-//        add(wrapper, BorderLayout.CENTER);
-//        setVisible(true);
-//        setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
     public boolean addUser(String name , String username , String password) {
         boolean flag = false;
