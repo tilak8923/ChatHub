@@ -1,11 +1,13 @@
 package org.example.server;
 
 import org.example.DataBaseConnection.DBOperation;
+import org.example.DataBaseConnection.Messages;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.*;
+
 
 public class chatServer {
     static ServerSocket serverSocket = null;
@@ -67,6 +69,21 @@ public class chatServer {
                 else{
                     out.println("UPDATE_FAILED");
                     System.out.println("Server says: UPDATE_FAILED" + " " + false);
+                }
+            }else if(msg != null && msg.startsWith("SEND_MESSAGE")){
+                String[] str = msg.split("\\|");
+                int user_id = Integer.parseInt(str[1]);
+                String message = str[2];
+                String time = str[3];
+
+                String name = DBOperation.getName(user_id);
+                System.out.println("User Name : " + name);
+                Boolean flag = Messages.sendMessage(user_id, message, time);
+                if(flag){
+                    out.println("SEND_SUCCESS" + "|" + name);
+                    System.out.println("Server says: SEND_SUCCESS" + " "+ true);
+                }else  {
+                    out.println("SEND_FAILED" + "|" + name);
                 }
             }
         }

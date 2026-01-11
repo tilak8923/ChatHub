@@ -7,7 +7,6 @@ interface DBOperations{
     int getUserId(String userName);
     String getUserName(int user_id);
     String getPassword(int user_id);
-    String getName(int user_id);
 }
 public class DBOperation implements DBOperations{
     public static boolean insertUser(String name, String username, String password) {
@@ -141,8 +140,7 @@ public class DBOperation implements DBOperations{
         return password;
     }
 
-    @Override
-    public String getName(int user_id) {
+    public static String getName(int user_id) {
         String name = "";
         try (Connection con = DBConnection.createConnection()) {
             PreparedStatement pst = con.prepareStatement("Select name from users where user_id = ?");

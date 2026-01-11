@@ -1,10 +1,17 @@
 package org.example.ui;
 import org.example.DataBaseConnection.DBOperation;
 import org.example.DataBaseConnection.Messages;
+import org.example.server.chatClient;
+import org.example.ui.popups.ErrorUi;
+import org.example.ui.popups.popUpPage;
 import org.example.ui.utils.RoundedBorder;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.Date;
@@ -53,19 +60,12 @@ public class chatWindow extends ChatWindowBase {
 
         sendButton = new JButton("Send");
         sendButton.addActionListener(e -> {
-            DBOperation obj = new DBOperation();
-            String name = obj.getName(user_id);
             String text = inputField.getText();
-
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
             String time = sdf.format(new Date());
-
-            Messages.sendMessage(user_id, text , time);
-            String[] arr = time.split(" ");
-            addMessage(name,text, arr[1]); // here addMessage add this msg in UI where we need only time
+            System.out.println("Send Button clicked");
+            addMessage(user_id, text , time);
         });
-//        here we take Name from users by user_id that is get in parameterized constructor
-//        and then sendMessage with this data user_id , msg and time
 
         footer.add(inputField, BorderLayout.CENTER);
         footer.add(sendButton, BorderLayout.EAST);
@@ -81,11 +81,35 @@ public class chatWindow extends ChatWindowBase {
         panel.add(footer);
     }
 
-    protected String getCurrentTime() {
-        return LocalTime.now().toString();
+    public void addMessage(int user_id, String text , String time){
+        try (Socket sc = chatClient.createSocket()) {
+            PrintWriter out = new PrintWriter(sc.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(sc.getInputStream()));
+
+            out.println("SEND_MESSAGE" + "|" + user_id + "|" + text + "|" + time);
+            System.out.println("Message sent to server");
+
+            String response = in.readLine();
+            String[] str = response.split("\\|");
+            String name = str[1];
+            System.out.println("Server says: SEND_MESSAGE" + " "+ true);
+
+            if(str[0].equals("MESSAGE_SEND_SUCCESS")){
+                System.out.println("Client received: "+ str[0]);
+
+            }else if(str[0].equals("MESSAGE_SEND_FAILED")){
+                System.out.println("Client received: "+ str[0]);
+
+            }else {
+                System.out.println("Something went wrong");
+            }
+            addMessageToScreen(name,text, time);
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 
-    public void addMessage(String msg , String text , String time) {
+    public void addMessageToScreen(String msg , String text , String time) {
         messageWrapper = new JPanel();
         messageWrapper.setLayout(new BoxLayout(messageWrapper, BoxLayout.Y_AXIS));
         messageWrapper.setBackground(new Color(239, 238, 238, 238));

@@ -77,7 +77,8 @@ public class Messages {
     }
 
 //    Used to Send Message to the DataBase
-    public static void sendMessage(int user_id, String message ,String time ){
+    public static Boolean sendMessage(int user_id, String message ,String time ){
+        boolean flag = false;
         try {
             String query = "Insert into chatdata(user_id , message, chat_time) values(?,?,?)";
             Connection con = DBConnection.createConnection();
@@ -89,6 +90,7 @@ public class Messages {
             int rows = stmt.executeUpdate();
             if(rows > 0){
                 System.out.println("Message Sends Successfully");
+                flag = true;
             }else {
                 System.out.println("Failed To Send Message");
             }
@@ -96,6 +98,7 @@ public class Messages {
         catch (SQLException e){
             e.printStackTrace();
         }
+        return flag;
     }
 
 //    Used to get Chat ID
