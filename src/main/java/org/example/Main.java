@@ -1,6 +1,6 @@
 package org.example;
 
-import org.example.UI.UserLogin;
+import org.example.ui.UserLogin;
 import org.example.server.chatServer;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or

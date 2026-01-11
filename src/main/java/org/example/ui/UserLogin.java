@@ -1,8 +1,9 @@
-package org.example.UI;
+package org.example.ui;
 
-import org.example.UI.error.ErrorUi;
-import org.example.UI.error.popUpPage;
+import org.example.ui.popups.ErrorUi;
+import org.example.ui.popups.popUpPage;
 import org.example.server.chatClient;
+import org.example.ui.utils.RoundedBorder;
 
 import javax.swing.*;
 import java.awt.*;
@@ -96,15 +97,41 @@ public class UserLogin extends BaseFrame {
                 }
             }else if (pass.isEmpty()){
                 new ErrorUi("Warning⚠️","Please enter password","Try Again","warning");
-            } else {
-                boolean flag = checkLogin(name , pass);
-                if(flag) {
-                    new popUpPage("LOGIN SUCCESSFUL" , "You’re all set and ready to start" ,"Open Chat" , name);
-                    new ErrorUi("All Set" , "You’re all set and ready to start" , "Open Chat" , "success");
-                    this.dispose();
-                }
-                else
-                    new ErrorUi("Error","User Not Exist","Register", "error");
+            }
+            else {
+//                boolean flag = checkLogin(name , pass);
+//                if(flag) {
+//                    new popUpPage("LOGIN SUCCESSFUL" , "You’re all set and ready to start" ,"Open Chat" , name);
+//                    new ErrorUi("All Set" , "You’re all set and ready to start" , "Open Chat" , "success");
+//                    this.dispose();
+//                }else
+//                    new ErrorUi("Error","User Not Exist","Register", "error");
+
+                // Background thread
+                new SwingWorker<Boolean, Void>() {
+
+                    @Override
+                    protected Boolean doInBackground() {
+                        return checkLogin(name, pass); // network call
+                    }
+                    @Override
+                    protected void done() {
+                        try {
+                            boolean flag = get(); // result from background
+
+                            if (flag) {
+                                new popUpPage("LOGIN SUCCESSFUL", "You’re all set and ready to start", "Open Chat", name);
+                                new ErrorUi("All Set", "You’re all set and ready to start", "Open Chat", "success");
+                                dispose();
+                            } else
+                                new ErrorUi("Error", "User Not Exist", "Register", "error");
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            new ErrorUi("Error","Server not responding","Try Again", "error");
+                        }
+                    }
+                }.execute();
             }
         });
         panel.add(login);
@@ -157,7 +184,6 @@ public class UserLogin extends BaseFrame {
             out.println("LOGIN" + " " + username + " " + password);
             // mtlb ye server recieve karega
 
-            System.out.println(in.readLine());
             String response = in.readLine();
 
             if("LOGIN_SUCCESS".equals(response)){

@@ -1,4 +1,4 @@
-package org.example.UI.error;
+package org.example.ui.popups;
 
 
 import javax.swing.*;

@@ -1,6 +1,7 @@
-package org.example.UI;
+package org.example.ui;
 import org.example.DataBaseConnection.DBOperation;
 import org.example.DataBaseConnection.Messages;
+import org.example.ui.utils.RoundedBorder;
 
 import javax.swing.*;
 import java.awt.*;

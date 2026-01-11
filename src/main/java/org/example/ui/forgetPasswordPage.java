@@ -1,7 +1,8 @@
-package org.example.UI;
+package org.example.ui;
 
 import org.example.DataBaseConnection.DBConnection;
-import org.example.UI.error.popUpPage;
+import org.example.ui.popups.popUpPage;
+import org.example.ui.utils.RoundedBorder;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,8 +1,8 @@
-package org.example.UI.error;
+package org.example.ui.popups;
 
 import org.example.DataBaseConnection.DBOperation;
-import org.example.UI.UserLogin;
-import org.example.UI.chatWindow;
+import org.example.ui.UserLogin;
+import org.example.ui.chatWindow;
 
 
 public class popUpPage extends PopUpBase {

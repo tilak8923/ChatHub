@@ -194,6 +194,28 @@ public class DBOperation implements DBOperations{
 //        System.out.println(arr[1]);
         return arr[0];
     }
+
+    public static Boolean loginAuth(String username, String password) throws SQLException {
+        boolean flag;
+
+        Connection conn = DBConnection.createConnection();
+        String checkSql = "select name from users where username = ? and password =?";
+        try {
+            PreparedStatement checkStmt = conn.prepareStatement(checkSql);
+            checkStmt.setString(1, username);
+            checkStmt.setString(2, password);
+            ResultSet rs = checkStmt.executeQuery();
+            flag = rs.next();
+            System.out.println("User Name: " + rs.getString(1)+" "+ flag);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        finally {
+            conn.close();
+        }
+        return flag;
+    }
+
 //    ***************** Testing purpose *****************
 
 //    public static void main(String[] args) {

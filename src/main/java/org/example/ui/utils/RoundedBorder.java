@@ -1,4 +1,4 @@
-package org.example.UI;
+package org.example.ui.utils;
 
 import javax.swing.border.AbstractBorder;
 import java.awt.*;
